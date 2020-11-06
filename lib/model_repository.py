@@ -76,7 +76,7 @@ class Resnet18_8s(nn.Module):
             in_loss = torch.mean(in_loss)
         return in_loss
 
-    def forward(self, image, sym_cor, mask, pts2d_map, graph=None):
+    def predict(self, image):
         x2s, x4s, x8s, x16s, x32s, xfc = self.resnet18_8s(image)
 
         fm = self.conv8s(torch.cat([xfc, x8s], 1))
@@ -94,6 +94,11 @@ class Resnet18_8s(nn.Module):
         mask_pred = F.sigmoid(x[:, 2:3])
         pts2d_map_pred = x[:, 3:-(self.num_edges*2)]
         graph_pred = x[:, -self.num_edges*2:]
+
+        return sym_cor_pred, mask_pred, pts2d_map_pred, graph_pred
+
+    def forward(self, image, sym_cor, mask, pts2d_map, graph=None):
+        sym_cor_pred, mask_pred, pts2d_map_pred, graph_pred = self.predict(image)
 
         graph_loss = self.masked_smooth_l1_loss(graph, graph_pred, mask)
         sym_cor_loss = self.masked_smooth_l1_loss(sym_cor_pred, sym_cor, mask)

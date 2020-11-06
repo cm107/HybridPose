@@ -12,3 +12,5 @@ saved_weights
 output
 logs/
 *.sh
+venv
+*saved_weights*
