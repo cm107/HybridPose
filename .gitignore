@@ -14,3 +14,4 @@ logs/
 *.sh
 venv
 *saved_weights*
+*.png
