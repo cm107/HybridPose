@@ -115,7 +115,7 @@ def fill(im_in):
 
 def main(args):
     K = get_camera_intrinsic_matrix(args)
-    P_list, in_mm = read_3d_points(args.ply_path)
+    P_list, in_mm = read_3d_points(args.ply_path, skip_normalize=True)
     P_blender_list, _ = read_3d_points(args.ply_path_before if args.ply_path_before is not None else args.ply_path, skip_normalize=True)
     O, n = parse_symmetry(args.symmetries_path)
     if in_mm: # convert to m
@@ -141,9 +141,12 @@ def main(args):
     keypts_3d = np.load(args.keypoints_3d_path)
     keypts_2d = np.zeros((num_examples, keypts_3d.shape[0], 2), dtype=np.float32)
 
+    # rotation_transform = np.matrix([[1., 0., 0.],
+    #                                 [0., -1., 0.],
+    #                                 [0., 0., -1.]])
     rotation_transform = np.matrix([[1., 0., 0.],
-                                    [0., -1., 0.],
-                                    [0., 0., -1.]])
+                                    [0., 1., 0.],
+                                    [0., 0., 1.]])
     # get translation transform
     # https://github.com/zju3dv/pvnet/blob/abc3f07cfcf352df3d718f10944213e1cde02db1/lib/utils/base_utils.py#L110
     orig_model = np.array(P_list)[:, :, 0]
