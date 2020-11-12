@@ -1,8 +1,7 @@
-import _init_paths
 import argparse
 import numpy as np
 import glob
-from lib.utils import compute_add_score, compute_adds_score
+from ..lib.utils import compute_add_score, compute_adds_score
 import pdb
 
 def parse_args():

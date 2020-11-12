@@ -1,3 +1,3 @@
 [submodule "lib/regressor/eigen"]
-	path = lib/regressor/eigen
+	path = HybridPose/lib/regressor/eigen
 	url = https://gitlab.com/libeigen/eigen

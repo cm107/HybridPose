@@ -1,19 +1,18 @@
-import _init_paths
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import argparse
 import random
-from lib.datasets.linemod import LinemodDataset
-from lib.datasets.occlusion_linemod import OcclusionLinemodDataset
-from lib.datasets.custom_blender_linemod import BlenderLinemodDataset
-from lib.datasets.fuse_linemod import FuseLinemodDataset
-from lib.datasets.sampler import ImageSizeBatchSampler
-from lib.datasets.concat import ConcatDataset
-from lib.model_repository import Resnet18_8s
-from lib.utils import *
-from trainers.custom_coretrainer import CoreTrainer
+from ..lib.datasets.linemod import LinemodDataset
+from ..lib.datasets.occlusion_linemod import OcclusionLinemodDataset
+from ..lib.datasets.custom_blender_linemod import BlenderLinemodDataset
+from ..lib.datasets.fuse_linemod import FuseLinemodDataset
+from ..lib.datasets.sampler import ImageSizeBatchSampler
+from ..lib.datasets.concat import ConcatDataset
+from ..lib.model_repository import Resnet18_8s
+from ..lib.utils import *
+from ..trainers.custom_coretrainer import CoreTrainer
 import pdb
 
 cuda = torch.cuda.is_available()

@@ -1,7 +1,7 @@
 from torch import nn
 import torch
 from torch.nn import functional as F
-from lib.resnet import resnet18, resnet50, resnet34
+from ..lib.resnet import resnet18, resnet50, resnet34
 import pdb
 
 class Resnet18_8s(nn.Module):

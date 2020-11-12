@@ -10,8 +10,8 @@ import pdb
 
 import sys
 sys.path.insert(0, '.')
-from lib.datasets.augmentation import rotate_instance, crop_resize_instance_v1
-from lib.datasets.augmentation import crop_or_padding_to_fixed_size
+from ...lib.datasets.augmentation import rotate_instance, crop_resize_instance_v1
+from ...lib.datasets.augmentation import crop_or_padding_to_fixed_size
 
 cuda = torch.cuda.is_available()
 

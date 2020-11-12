@@ -6,11 +6,11 @@ import cv2
 import numpy as np
 from sklearn.neighbors import KDTree
 from random import sample
-from lib.utils import save_session, AverageMeter
-from lib.ransac_voting_gpu_layer.ransac_voting_gpu import ransac_voting_layer_v3
-from lib.ransac_voting_gpu_layer.ransac_voting_gpu import estimate_voting_distribution_with_mean
-from lib.regressor.regressor import load_wrapper, get_2d_ctypes
-from src.evaluate import read_diameter
+from ..lib.utils import save_session, AverageMeter
+from ..lib.ransac_voting_gpu_layer.ransac_voting_gpu import ransac_voting_layer_v3
+from ..lib.ransac_voting_gpu_layer.ransac_voting_gpu import estimate_voting_distribution_with_mean
+from ..lib.regressor.regressor import load_wrapper, get_2d_ctypes
+from ..src.evaluate import read_diameter
 import pdb
 
 cuda = torch.cuda.is_available()

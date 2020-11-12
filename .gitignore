@@ -3,11 +3,12 @@ __pycache__/
 *.so
 *.swp
 build/
-data/linemod
-data/occlusion_linemod
-data/blender_linemod
-data/fuse_linemod
-data/temp
+HybridPose/data/linemod
+HybridPose/data/occlusion_linemod
+HybridPose/data/blender_linemod
+HybridPose/data/fuse_linemod
+HybridPose/data/temp
+HybridPose/lib/regressor/eigen
 saved_weights
 output
 logs/

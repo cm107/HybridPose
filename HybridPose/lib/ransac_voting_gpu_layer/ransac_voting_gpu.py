@@ -1,5 +1,5 @@
 import torch
-import lib.ransac_voting_gpu_layer.ransac_voting as ransac_voting
+from ...lib.ransac_voting_gpu_layer import ransac_voting
 import numpy as np
 
 def log_msg(msg):

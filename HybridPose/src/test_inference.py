@@ -1,13 +1,12 @@
-import _init_paths
 import argparse
 import torch
 import torch.nn as nn
 import cv2
 import numpy as np
 import random
-from lib.model_repository import Resnet18_8s
-from lib.ransac_voting_gpu_layer.ransac_voting_gpu import ransac_voting_layer_v3
-from lib.ransac_voting_gpu_layer.ransac_voting_gpu import estimate_voting_distribution_with_mean
+from ..lib.model_repository import Resnet18_8s
+from ..lib.ransac_voting_gpu_layer.ransac_voting_gpu import ransac_voting_layer_v3
+from ..lib.ransac_voting_gpu_layer.ransac_voting_gpu import estimate_voting_distribution_with_mean
 
 def load_model(model, args):
     model.load_state_dict(torch.load(args.weights_path))
