@@ -13,7 +13,7 @@ from lib.datasets.sampler import ImageSizeBatchSampler
 from lib.datasets.concat import ConcatDataset
 from lib.model_repository import Resnet18_8s
 from lib.utils import *
-from trainers.coretrainer import CoreTrainer
+from trainers.custom_coretrainer import CoreTrainer
 import pdb
 
 cuda = torch.cuda.is_available()
@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument('--test_every', type=int, default=20)
     parser.add_argument('--save_every', type=int, default=20)
     parser.add_argument('--num_keypoints', type=int, default=8)
+    parser.add_argument('--diameter_path', type=str, required=True)
     args = parser.parse_args()
     return args
 
@@ -74,16 +75,46 @@ def setup_loaders(args):
     #                                          batch_size=args.batch_size,
     #                                          shuffle=True)
 
-    custom_train_set = BlenderLinemodDataset(
+    train_set = BlenderLinemodDataset(
         data_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders/hsr',
-        labels_dir='',
+        labels_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders/hsr_labels',
+        keypoints_3d_path='/home/clayton/workspace/git/clean-pvnet/hsr_keypoints_3d.npy',
+        symmetries_path='/home/clayton/workspace/git/symseg/bin/output/hsr_symmetries.txt',
+        object_name='hsr',
+        size=200,
+        augment=True,
+        occlude=False,
+        split='train'
     )
-    train_set = custom_train_set
     train_sampler = torch.utils.data.sampler.RandomSampler(train_set)
     train_batch_sampler = ImageSizeBatchSampler(train_sampler, args.batch_size)
     train_loader = torch.utils.data.DataLoader(train_set,
                                             num_workers=8,
                                             batch_sampler=train_batch_sampler)
+    val_set = BlenderLinemodDataset(
+        data_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders_val/hsr',
+        labels_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders_val/hsr_labels',
+        keypoints_3d_path='/home/clayton/workspace/git/clean-pvnet/hsr_keypoints_3d.npy',
+        symmetries_path='/home/clayton/workspace/git/symseg/bin/output/hsr_symmetries.txt',
+        object_name='hsr',
+        size=200,
+        augment=False,
+        occlude=False,
+        split='val'
+    )
+    val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size, shuffle=True)
+    test_set = BlenderLinemodDataset(
+        data_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders_test/hsr',
+        labels_dir='/home/clayton/workspace/git/pvnet-rendering/custom_renders_test/hsr_labels',
+        keypoints_3d_path='/home/clayton/workspace/git/clean-pvnet/hsr_keypoints_3d.npy',
+        symmetries_path='/home/clayton/workspace/git/symseg/bin/output/hsr_symmetries.txt',
+        object_name='hsr',
+        size=200,
+        augment=False,
+        occlude=False,
+        split='test'
+    )
+    test_loader = torch.utils.data.DataLoader(test_set, batch_size=args.batch_size, shuffle=True)
 
     return train_loader, test_loader, val_loader
 
@@ -114,10 +145,11 @@ if __name__ == '__main__':
                           train_loader,
                           test_loader,
                           args)
-    for epoch in range(start_epoch, args.n_epochs):
-        trainer.train(epoch)
-        if (epoch + 1) % args.test_every == 0:
-            trainer.test(epoch)
-        if (epoch + 1) % args.save_every == 0:
-            trainer.save_model(epoch)
+    if args.load_dir is None:
+        for epoch in range(start_epoch, args.n_epochs):
+            trainer.train(epoch)
+            if (epoch + 1) % args.test_every == 0:
+                trainer.test(epoch)
+            if (epoch + 1) % args.save_every == 0:
+                trainer.save_model(epoch)
     trainer.generate_data(val_loader)

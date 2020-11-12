@@ -45,6 +45,11 @@ def read_diameter(object_name):
         diameter_in_cm = float(f.readline())
     return diameter_in_cm * 0.01
 
+def custom_read_diameter(path: str):
+    with open(path) as f:
+        diameter_in_cm = float(f.readline())
+    return diameter_in_cm * 0.01
+
 # main function
 if __name__ == '__main__':
     args = parse_args()

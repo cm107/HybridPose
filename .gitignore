@@ -13,5 +13,6 @@ output
 logs/
 *.sh
 venv
-*saved_weights*
+*saved_weights
+*output
 *.png

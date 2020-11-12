@@ -17,6 +17,8 @@ from lib.datasets.augmentation import crop_or_padding_to_fixed_size
 cuda = torch.cuda.is_available()
 
 class BlenderLinemodDataset(Dataset):
+    # TODO: Test dataset needs to have camera_intrinsic class variable. Refer to datasets/occlusion_linemod.py
+    # Probably need to use the same camera_intrinsic values as in custom_label.py
     def __init__(
         self,
         data_dir: str, # Path to class dataset folder you want to train on. Generated from pvnet-rendering
@@ -27,8 +29,12 @@ class BlenderLinemodDataset(Dataset):
         size=200,
         augment=True,
         occlude=False,
-        split='train'
+        split='train',
+        fx: float=700.0, fy: float=700.0, # Using same convention as custom_label.py
+        px: float=320.0, py: float=240.0
     ):
+        self.camera_intrinsic = {'fu': fx, 'fv': fy,
+                                 'uc': px, 'vc': py}
         self.object_name = object_name
         # linemod_objects = ['ape', 'benchviseblue', 'cam', 'can', 'cat',
         #                    'driller', 'duck', 'eggbox', 'glue', 'holepuncher',
@@ -180,7 +186,7 @@ class BlenderLinemodDataset(Dataset):
         if isinstance(idx, tuple):
             idx, height, width = idx
         else:
-            assert not self.augment
+            assert not self.augment # Because not a batch -> not training?
         multiplier = np.random.randint(0, self.length // self.size)
         idx = multiplier * self.size + idx
         # image
@@ -248,7 +254,9 @@ class BlenderLinemodDataset(Dataset):
             R, t = self.read_pose(idx)
             pts3d = self.pts3d
             normal = self.normal
-            return {
+            return { # Missing object_name, local_idx,
+                    'object_name': self.object_name,
+                    'local_idx':  idx,
                     'image': image,
                     'image_name': image_name,
                     'pts2d': pts2d,
